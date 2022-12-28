@@ -11,6 +11,7 @@ import { Transaction } from "@etclabscore/ethereum-json-rpc";
 
 const unit = require("ethjs-unit"); //tslint:disable-line
 
+const txListSize = 500;
 interface IProps {
   match: {
     params: {
@@ -31,7 +32,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
   const blockNum = block === undefined ? blockNumber : parseInt(block, 10);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
 
-  const from = Math.max(blockNum ? blockNum : 0 - 99, 0);
+  const from = Math.max(blockNum-txListSize, 0);  
   const to = blockNum;
 
   React.useEffect(() => {
@@ -77,7 +78,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
         if (!tx) {
           return false;
         }
-        return tx.to === address || tx.from === address;
+        return (tx.to)?.toLowerCase() === address.toLowerCase() || (tx.from)?.toLowerCase() === address.toLowerCase();
       });
       const sortedTxes = _.sortBy(filteredTxes, (tx: any) => {
         return hexToNumber(tx.blockNumber);
@@ -85,7 +86,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
       setTransactions(sortedTxes);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [from, to]);
+  }, [from, to, erpc]);
 
   if (transactionCount === undefined || balance === undefined || code === undefined) {
     return <CircularProgress />;
@@ -103,13 +104,13 @@ const Address: React.FC<IProps> = ({ match, history }) => {
         to={to}
         transactions={transactions}
         disablePrev={blockNum >= blockNumber}
-        disableNext={blockNum === 0}
+        disableNext={blockNum <= txListSize}
         onPrev={() => {
-          const newQuery = blockNum + 100;
+          const newQuery = blockNum + txListSize;
           history.push(`/address/${address}/${newQuery}`);
         }}
         onNext={() => {
-          const newQuery = Math.max(blockNum - 100, 0);
+          const newQuery = Math.max(blockNum - txListSize, 0);
           history.push(`/address/${address}/${newQuery}`);
         }}
       />
