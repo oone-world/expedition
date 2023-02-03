@@ -1,0 +1,11 @@
+[Unit]
+Description=Blockchain Explorer
+[Service]
+User=adigium
+ExecStart=/bin/bash /home/adigium/expedition/blockchain-explorer.sh
+StandardOutput=append:/home/adigium/expedition/blockchain-explorer.log
+RemainAfterExit=no
+Restart=always
+RestartSec=5s
+[Install]
+WantedBy=default.target
