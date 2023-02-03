@@ -11,7 +11,7 @@ import { Transaction } from "@etclabscore/ethereum-json-rpc";
 
 const unit = require("ethjs-unit"); //tslint:disable-line
 
-const txListSize = 10000;
+const txListSize = 100;
 interface IProps {
   match: {
     params: {
