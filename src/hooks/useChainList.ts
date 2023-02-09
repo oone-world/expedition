@@ -10,7 +10,7 @@ export default function () {
     {
       name: "Oone.World",
       network: "Oone",
-      rpc: ["https://adg.adigium.com"],
+      rpc: ["https://blockchain-test.adigium.world"],
     },
     {
       name: "Ethereum Classic",
